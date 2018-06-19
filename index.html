@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue.js とaxios のJSONテスト</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://www.promisejs.org/polyfills/promise-6.1.0.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Vue.js とaxios のJSONテスト</h1>
+    <div id="articles">
+      <article :id="'post-' + post.id" class="article mt-5" v-for="post in posts.slice(0,2)">
+        <h2 class="alert alert-info">{{ post.title.rendered }}</h2>
+        <div v-html="post.content.rendered"></div>
+      </article>
+
+      <article :id="'post-' + post.id" class="article mt-5" v-for="(post, count) in posts.slice(2, posts.length)">
+        <h2 class="alert alert-dark">{{ post.title.rendered }}</h2>
+        <div v-html="post.excerpt.rendered"></div>
+        <p class="text-right"><a :href="post.link" class="btn btn-danger btn-lg">続きを読む</a></p>
+      </article>
+    </div>
+    <script>
+    var articles = new Vue({
+      el: '#articles',
+      count: '',
+      data: {
+        posts: [],
+      },
+      mounted: function () {
+        axios.get('https://chiilog.com/wp-json/wp/v2/posts').then(function (res) {
+          articles.posts = res.data;
+        });
+      }
+    });
+    articles.count = 0;
+    </script>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+</body>
+</html>
